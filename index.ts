@@ -15,7 +15,12 @@ const tableName = "dev-invite";
 // Customization 3: specify the hash key for your table
 const hashKey = "InviteToken";
 
-// Customization 4: add logic to determine which (return true if you want to delete the respective item)
+// Customization 4: if your table has a range key, specify it here. If your table does not have a range key
+// set the value below to null
+const rangeKey = "RangeKeyValue";
+
+
+// Customization 5: add logic to determine which (return true if you want to delete the respective item)
 // If you don't want to filter anything out, then just return true in this function (or remove the filter step below, where this filter is used)
 const shouldDeleteItem = (item: any): boolean => {
   return item.Type === "SECURE_MESSAGE" || item.Type === "PATIENT";
@@ -41,11 +46,15 @@ export const deleteAllItemsFromTable = async (
     const requestItems = {
       [tableName]: patch.filter(shouldDeleteItem).map(item => {
         numItemsDeleted++;
+        const Key = {
+          [hashKey]: item[hashKey]
+        };
+        if (rangeKey) {
+          Key[rangeKey] = item[rangeKey];
+        };
         return {
           DeleteRequest: {
-            Key: {
-              [hashKey]: item[hashKey]
-            }
+            Key
           }
         };
       })
