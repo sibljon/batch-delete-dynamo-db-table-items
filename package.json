@@ -4,7 +4,7 @@
   "main": "index.ts",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.585.0",
+    "aws-sdk": "^2.814.0",
     "prettier": "^1.19.1",
     "typescript": "^3.7.3"
   },
